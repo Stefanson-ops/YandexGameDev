@@ -4,13 +4,16 @@ using UnityEngine.AI;
 
 public class Enemy_Controller : MonoBehaviour
 {
-    public static Action onDeath;
 
     [SerializeField] private NavMeshAgent _agent;
 
     [SerializeField] private Transform _player;
-    [SerializeField] public float _minDistanceToPlayer;
-    [SerializeField] public float _speed;
+    [SerializeField] public float MinDistanceToPlayer;
+    [SerializeField] public float Speed;
+    [SerializeField] public float AttackSpeed;
+    [SerializeField] private bool _canAttack = true;
+
+    [SerializeField] private Enemy_Animation_Controller _animationController;
 
     private void Start()
     {
@@ -18,7 +21,7 @@ public class Enemy_Controller : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
-        _agent.speed = _speed;
+        _agent.speed = Speed;
 
         _agent.SetDestination(_player.position);
     }
@@ -26,12 +29,13 @@ public class Enemy_Controller : MonoBehaviour
     private void Update()
     {
         MoveToPlayer();
+        SetAnimations();
     }
 
     private void MoveToPlayer()
     {
-        if (Vector2.Distance(transform.position, _player.position) > _minDistanceToPlayer)
-            _agent.speed = _speed;
+        if (Vector2.Distance(transform.position, _player.position) > MinDistanceToPlayer)
+            _agent.speed = Speed;
         else
             _agent.speed = 0;
 
@@ -39,14 +43,40 @@ public class Enemy_Controller : MonoBehaviour
         _agent.SetDestination(_player.position);
     }
 
-    private void Death()
+    private void SetAnimations()
     {
-        onDeath?.Invoke();
-        print(this.name + " death");
+        if (_agent.speed > 0)
+            _animationController.SetRunningState(true);
+        else
+        {
+            _animationController.SetRunningState(false);
+            if (_canAttack)
+                Attack();
+        }
+
+        if (_agent.destination.x < transform.position.x)
+            _animationController.FlipSprite(true);
+        else
+            _animationController.FlipSprite(false);
+
+
     }
 
-    private void OnDestroy()
+    private void Attack()
     {
-        Death();
+        _animationController.Attack();
+        _canAttack = false;
+        Invoke(nameof(ReloadAttack), 1);
+    }
+
+    private void ReloadAttack()
+    {
+        _canAttack = true;
+    }
+
+    public void Death()
+    {
+        Destroy(gameObject);
+        print(this.name + " death");
     }
 }

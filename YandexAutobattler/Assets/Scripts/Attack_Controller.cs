@@ -1,33 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Attack_Controller : MonoBehaviour
 {
-    [SerializeField] private Animator _anim;
+    public static Action OnAttack;
+
+    [SerializeField] private Player_Animation_Controller _animController;
     [SerializeField] private int _damage;
     [SerializeField] private float _attackDelay;
     [SerializeField] private float _attackRange;
-    [SerializeField] private LayerMask _whatIsEnemy;
+    [SerializeField] public LayerMask _whatIsEnemy;
+    [SerializeField] private bool _canAttack = true;
 
-    private void Start()
+    public void Attack()
     {
-        StartCoroutine(Attack());
+        if (_canAttack)
+        {
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, _attackRange, _whatIsEnemy);
+            foreach (Collider2D enemy in hitEnemies)
+                enemy.GetComponent<Enemy_Stats>().TakeDamage(_damage);
+            _animController.Attack();
+            print("Attack");
+            OnAttack?.Invoke();
+            Invoke(nameof(ReloadAttack), _attackDelay);
+        }
     }
 
-    private IEnumerator Attack()
+    private void ReloadAttack()
     {
-        float startTime = Time.time;
-
-        while (Time.time < startTime + _attackDelay)
-            yield return null;
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, _attackRange, _whatIsEnemy);
-        foreach (Collider2D enemy in hitEnemies)
-            enemy.GetComponent<Enemy_Stats>().TakeDamage(_damage);
-        _anim.SetTrigger("Attack");
-        print("Attack");
-        StartCoroutine(Attack());
+        _canAttack = true;
     }
 
     private void OnDrawGizmosSelected()

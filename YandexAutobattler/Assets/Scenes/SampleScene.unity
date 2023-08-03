@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9bcbe4288952cf408c6b5d13231e7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentEnemiesCount: 1
+  CurrentEnemiesCount: 5
   Enemies:
   - {fileID: 4183038301352325931, guid: c99eb142f66b25840bf2e04851476498, type: 3}
 --- !u!114 &34288228
@@ -207,6 +207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerStats: {fileID: 0}
   _enemySpawner: {fileID: 0}
+  _currentGold: 0
+  _currentXP: 0
+  _XPForNextLVL: 5
 --- !u!1 &145396131
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +787,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -865,25 +869,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1014444163 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6516689395957724413, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
-  m_PrefabInstance: {fileID: 5336246390001520159}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1014444168
+--- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014444163}
+  m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 298d683b52ffbd54597b076a631b9b1c, type: 3}
+  m_Script: {fileID: 11500000, guid: a30b441120bf7264a81ec0c35f17a11d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LVL: 0
-  HP: 0
+  _duration: 0.2
+  _magnitude: 0.05
 --- !u!1 &1633249009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,7 +1174,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 370015451067115458, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 370015451067115458, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1217,13 +1216,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6806401926912675677, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
+      propertyPath: HP
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8233878716661871123, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6516689395957724413, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1014444168}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5d870d5fdcc1474784c4f122b5581ac, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

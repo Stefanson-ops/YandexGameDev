@@ -1,17 +1,25 @@
 using UnityEngine;
+using System;
 
 public class Enemy_Stats : MonoBehaviour
 {
     [SerializeField] private Enemy_Info _enemyInfo;
     [SerializeField] private Enemy_Controller _enemyController;
     [SerializeField] private int _health;
+    [SerializeField] private int _maxGold;
+    [SerializeField] private int _XP;
+
+
+    public static Action<int, int> onDeath;
 
     private void Start()
     {
-        _enemyController._minDistanceToPlayer = _enemyInfo._minDistanceToPlayer;
-        _enemyController._speed = _enemyInfo._speed;
-        _health = _enemyInfo._health;
-        
+        _enemyController.MinDistanceToPlayer = _enemyInfo.MinDistanceToPlayer;
+        _enemyController.Speed = _enemyInfo.Speed;
+        _enemyController.AttackSpeed = _enemyInfo.AttackSpeed;
+        _health = _enemyInfo.Health;
+        _maxGold = _enemyInfo.MaxGold;
+        _XP = _enemyInfo.XP;
     }
 
     private void OnMouseDown()
@@ -23,6 +31,9 @@ public class Enemy_Stats : MonoBehaviour
     {
         _health -= damage;
         if (_health <= 0)
-            Destroy(gameObject);
+        {
+            onDeath?.Invoke(_maxGold, _XP);
+            _enemyController.Death();
+        }
     }
 }
